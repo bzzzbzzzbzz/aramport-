@@ -1,0 +1,36 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h1>Termékeink</h1>
+<p style="color: var(--secondary);">Összesen {{ products|length }} termék</p>
+
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+        {% else %}
+        <div style="height: 200px; background: var(--background); border-radius: 5px; display: flex; align-items: center; justify-content: center; color: var(--secondary);">
+            Nincs kép
+        </div>
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <div class="product-price">{{ product.price }} {{ product.currency }}</div>
+        <div class="{% if product.in_stock %}in-stock{% else %}" style="color: var(--secondary);"{% endif %}>
+            {{ product.in_stock|yesno:"✓ Raktáron,✗ Elfogyott" }}
+        </div>
+
+        <!-- ДОБАВЬТЕ ЭТУ СТРОКУ ЗДЕСЬ ↓ -->
+        <a href="{% url 'add_to_cart' product.id %}" class="btn" style="margin-top: 1rem;">Kosárba</a>
+        <!-- ДОБАВЬТЕ ЭТУ СТРОКУ ЗДЕСЬ ↑ -->
+
+        <a href="{% url 'product_detail' product.slug %}" class="btn" style="margin-top: 0.5rem; background: var(--secondary);">Részletek</a>
+    </div>
+    {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+        <p>Nincsenek termékek</p>
+        <a href="/admin/store/product/add/" class="btn">Első termék hozzáadása</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

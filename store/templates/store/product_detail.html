@@ -1,0 +1,55 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <!-- Исправленная ссылка назад -->
+    <a href="{% url 'product_list' %}" style="color: var(--primary); text-decoration: none; margin-bottom: 1rem; display: inline-block;">← Vissza a termékekhez</a>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+        <div>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            {% else %}
+            <div style="height: 300px; background: var(--background); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--secondary);">
+                Nincs kép
+            </div>
+            {% endif %}
+        </div>
+
+        <div>
+            <h1 style="margin-top: 0;">{{ product.name }}</h1>
+            <div style="font-size: 1.5rem; color: var(--primary); font-weight: bold; margin: 1rem 0;">
+                {{ product.price }} {{ product.currency }}
+            </div>
+
+            <div style="margin: 1rem 0;">
+                <span class="{% if product.in_stock %}in-stock{% else %}" style="color: #ef4444;"{% endif %}" style="font-size: 1.1rem;">
+                    {{ product.in_stock|yesno:"✓ Raktáron,✗ Elfogyott" }}
+                </span>
+            </div>
+
+            <!-- КНОПКА ДОБАВЛЕНИЯ В КОРЗИНУ -->
+            {% if product.in_stock %}
+            <a href="{% url 'add_to_cart' product.id %}" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem; margin-right: 1rem;">
+                Kosárba
+            </a>
+            {% else %}
+            <button class="btn" style="padding: 1rem 2rem; font-size: 1.1rem; margin-right: 1rem; background: var(--secondary);" disabled>
+                Elfogyott
+            </button>
+            {% endif %}
+            
+            <button style="padding: 1rem 2rem; font-size: 1.1rem; background: var(--secondary); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Kedvencekhez
+            </button>
+        </div>
+    </div>
+    
+    {% if product.description %}
+    <div style="margin-top: 3rem;">
+        <h2>Leírás</h2>
+        <p style="line-height: 1.6; color: var(--secondary);">{{ product.description }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div style="text-align: center; padding: 3rem 0;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Üdvözöljük az ÁramPort-ban!</h1>
+    <p style="font-size: 1.2rem; color: var(--secondary); margin-bottom: 2rem;">
+        Minőségi elektronikai termékek, gyors szállítással
+    </p>
+    <a href="{% url 'product_list' %}" class="btn" style="padding: 1rem 2rem; font-size: 1.1rem; margin: 0.5rem;">
+        Termékek böngészése
+    </a>
+</div>
+
+<div style="background: var(--background); padding: 3rem 0; margin: 3rem -1rem;">
+    <div style="max-width: 1000px; margin: 0 auto; text-align: center;">
+        <h2>Miért válassza az ÁramPort-ot?</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            <div>
+                <h3>⚡ Gyors szállítás</h3>
+                <p>Budapesten belül 24 órán belül</p>
+            </div>
+            <div>
+                <h3>🔒 2 év garancia</h3>
+                <p>Minden termékre garanciát adunk</p>
+            </div>
+            <div>
+                <h3>💬 24/7 támogatás</h3>
+                <p>Segítünk bármilyen kérdésben</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

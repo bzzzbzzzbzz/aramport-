@@ -1,0 +1,73 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h1>🛒 Kosaram</h1>
+
+{% if cart_items %}
+<form method="post" action="">
+    {% csrf_token %}
+    <table style="width: 100%; border-collapse: collapse; margin: 2rem 0;">
+        <thead>
+            <tr style="border-bottom: 2px solid var(--primary);">
+                <th style="text-align: left; padding: 1rem;">Termék</th>
+                <th style="text-align: center; padding: 1rem;">Ár</th>
+                <th style="text-align: center; padding: 1rem;">Mennyiség</th>
+                <th style="text-align: right; padding: 1rem;">Összesen</th>
+                <th style="text-align: center; padding: 1rem;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr style="border-bottom: 1px solid var(--background);">
+                <td style="padding: 1rem;">
+                    <div style="display: flex; align-items: center;">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 1rem;">
+                        {% endif %}
+                        {{ item.product.name }}
+                    </div>
+                </td>
+                <td style="text-align: center; padding: 1rem;">{{ item.product.price }} {{ item.product.currency }}</td>
+                <td style="text-align: center; padding: 1rem;">
+                    <form method="post" action="{% url 'update_cart' item.product.id %}" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="10" style="width: 60px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">
+                        <button type="submit" style="background: var(--primary); color: white; border: none; border-radius: 4px; padding: 0.3rem 0.6rem; cursor: pointer;">✓</button>
+                    </form>
+                </td>
+                <td style="text-align: right; padding: 1rem; font-weight: bold;">{{ item.total }} {{ item.product.currency }}</td>
+                <td style="text-align: center; padding: 1rem;">
+                    <a href="{% url 'remove_from_cart' item.product.id %}" style="color: #ef4444; text-decoration: none; font-size: 1.2rem;" onclick="return confirm('Biztosan eltávolítja ezt a terméket?')">✕</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right; padding: 1rem; font-weight: bold;">Végösszeg:</td>
+                <td style="text-align: right; padding: 1rem; font-weight: bold; color: var(--primary);">
+                    {{ total_price }} HUF
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</form>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem;">
+    <a href="{% url 'product_list' %}" class="btn" style="background: var(--secondary);">← Vásárlás folytatása</a>
+    <div style="display: flex; gap: 1rem;">
+        <!-- ДОБАВЬТЕ ЭТУ СТРОКУ ЗДЕСЬ ↓ -->
+        <a href="{% url 'clear_cart' %}" class="btn" style="background: #ef4444;" onclick="return confirm('Biztosan kiüríti a kosarat?')">Kosár ürítése</a>
+        <!-- ДОБАВЬТЕ ЭТУ СТРОКУ ЗДЕСЬ ↑ -->
+        <a href="{% url 'remove_from_cart' 0 %}" class="btn" style="background: #ef4444;" onclick="return confirm('Biztosan kiüríti a kosarat?')">Kosár ürítése</a>
+        <button class="btn" style="background: var(--success);">Tovább a fizetéshez</button>
+    </div>
+</div>
+{% else %}
+<div style="text-align: center; padding: 3rem;">
+    <p style="font-size: 1.2rem; color: var(--secondary);">A kosara üres</p>
+    <a href="{% url 'product_list' %}" class="btn">Termékek böngészése</a>
+</div>
+{% endif %}
+{% endblock %}
